@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  database:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mordle
+      - MONGO_INITDB_ROOT_PASSWORD=Start1234
+    ports:
+      - 27017:27017

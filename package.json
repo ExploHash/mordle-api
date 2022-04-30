@@ -1,0 +1,30 @@
+{
+  "name": "mordle-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx tsc && node out/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExploHash/mordle-api.git"
+  },
+  "author": "Jimmy Beaart",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ExploHash/mordle-api/issues"
+  },
+  "homepage": "https://github.com/ExploHash/mordle-api#readme",
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "@types/mongodb": "^4.0.7",
+    "bson-objectid": "^2.0.3",
+    "dotenv": "^16.0.0",
+    "mongodb": "^4.5.0",
+    "socket.io": "^4.5.0"
+  }
+}
