@@ -1,10 +1,12 @@
 import * as mongoDB from "mongodb";
 
 import { Game } from "../classes/Game";
+import { PointsGame } from "../classes/gamemodes/PointsGame";
 import { User } from "../classes/User";
 
 export const collections: {
   games?: mongoDB.Collection<Game>,
+  pointsGames?: mongoDB.Collection<PointsGame>,
   users?: mongoDB.Collection<User>,
 } = {};
 
@@ -18,16 +20,20 @@ export async function connectToDatabase() {
     // Connect to the database with the name specified in .env
     const db = client.db(process.env.DB_NAME);
 
-    const collectionNames = ["games", "users"];
+    const collectionMapping = {
+      games: "games",
+      pointsGames: "games",
+      users: "users"
+    }
 
-    for(const collectionName of collectionNames) {
+    for(const [propertyName, collectionName] of Object.entries(collectionMapping)) {
       await db.listCollections({name: collectionName}).next(async (err, collinfo) => {
         if (!collinfo) {
           await db.createCollection(collectionName);
         }
       });
 
-      collections[collectionName] = db.collection(collectionName);
+      collections[propertyName] = db.collection(collectionName);
     }
 
     console.log("Connected");

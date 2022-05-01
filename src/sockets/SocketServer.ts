@@ -4,14 +4,18 @@ import { CustomGameResponse } from "../events/server/CustomGameResponse";
 import { CustomGameCreate } from "../events/client/CustomGameCreate";
 import { SessionHandler } from "./SessionHandler";
 import { GameHandler } from "./GameHandler";
+import { PointsGameHandler } from "./PointsGameHandler";
+import { PointsGameUpdate } from "../events/server/pointsGame/PointsGameUpdate";
 
 interface ServerToClientEvents {
   CustomGameResponse: CustomGameResponse;
+  
 }
 
 interface ClientToServerEvents {
   InputEvent: InputEvent;
   CustomGameCreate: CustomGameCreate;
+  PointsGameUpdate: PointsGameUpdate;
 }
 
 interface InterServerEvents {
@@ -35,8 +39,9 @@ export abstract class SocketServer {
 
     this.io.on("connection", (socket) => {
       console.log("User connected");
-      SessionHandler.init(socket);
-      GameHandler.init(socket);
+      SessionHandler.attach(socket);
+      GameHandler.attach(socket);
+      PointsGameHandler.attach(socket);
     });
   }
 }

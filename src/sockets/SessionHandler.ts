@@ -4,7 +4,7 @@ import { User } from "../classes/User";
 import { collections } from "../services/Database";
 
 export abstract class SessionHandler {
-  public static init(socket: Socket) {
+  public static attach(socket: Socket) {
     socket.on("register", async (user: User, callback) => {
       console.log("User registered: " + user.nickname);
       //Save to socketdata
@@ -34,7 +34,7 @@ export abstract class SessionHandler {
         await collections.users.insertOne(user);
       }
 
-      callback();
+      if(callback) callback();
     });
   }
 }

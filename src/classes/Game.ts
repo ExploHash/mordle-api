@@ -16,7 +16,9 @@ export class Game {
   status: GameStatus;
   type: GameTypes;
 
-  constructor(type: GameTypes, playerIdentifiers: string[]) {
+  constructor() {}
+
+  initializeGame(type: GameTypes, playerIdentifiers: string[]){
     this.playerIdentifiers = playerIdentifiers;
     this.type = type;
     this.status = GameStatus.WaitingForPlayers;
