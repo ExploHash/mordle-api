@@ -33,7 +33,7 @@ export abstract class SocketServer {
   public static init() {
     this.io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(6969, {
       cors: {
-        origin: "http://localhost:3000"
+        origin: "http://mordle.nykaworks.com"
       }
     });
 
