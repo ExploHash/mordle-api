@@ -44,7 +44,7 @@ export class PointsBoard extends Board {
 
     //Add bonus of solved
     if(this.status === BoardStatus.Solved){
-      this.score += Math.floor(50 * ((this.boardSize - this.currentRowIndex + 1) / this.boardSize));
+      this.score += Math.floor(50 * ((this.boardSize - this.currentRowIndex) / this.boardSize));
     }
 
     return true;
