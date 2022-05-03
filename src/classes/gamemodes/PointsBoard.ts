@@ -36,13 +36,15 @@ export class PointsBoard extends Board {
     //Add missing letters
     const newMissingLetters: Letter[] = this.letters[rowIndex]
       .filter(r => !r.located && !r.present)
+      .filter(r => !this.presentLetters.includes(r.value))
+      .filter(r => !this.locatedLetters.includes(r.value))
       .filter(r => !this.missingLetters.includes(r.value));
 
     this.missingLetters.push(...newMissingLetters.map(m => m.value));
 
     //Add bonus of solved
     if(this.status === BoardStatus.Solved){
-      this.score += Math.floor((50 / (this.boardSize - (this.currentRowIndex / this.boardSize))));
+      this.score += Math.floor(50 * ((this.boardSize - this.currentRowIndex + 1) / this.boardSize));
     }
 
     return true;
