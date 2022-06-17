@@ -37,23 +37,21 @@ export abstract class GameHandler {
             throw new Error("Game not found");
         }
 
-        if (game.status !== "WaitingForPlayers") {
-            throw new Error("Game is already started");
-        }
-
-        if(!game.playerIdentifiers.includes(socket.data.user.identifier))
-            game.playerIdentifiers.push(socket.data.user.identifier);
-
-        await collections.games.updateOne(
-            {
-                _id: game._id,
-            },
-            {
-                $set: {
-                    playerIdentifiers: game.playerIdentifiers,
+        if (game.status === "WaitingForPlayers") {    
+            if(!game.playerIdentifiers.includes(socket.data.user.identifier))
+                game.playerIdentifiers.push(socket.data.user.identifier);
+    
+            await collections.games.updateOne(
+                {
+                    _id: game._id,
                 },
-            }
-        );
+                {
+                    $set: {
+                        playerIdentifiers: game.playerIdentifiers,
+                    },
+                }
+            );
+        }
 
         const response: CustomGameResponse = {
             id: game._id.toHexString(),
