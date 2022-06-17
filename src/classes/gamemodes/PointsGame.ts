@@ -1,15 +1,29 @@
 import { Game, GameStatus, GameTypes } from '../Game';
 import { User } from '../User';
 import { UserStatePointsGame } from './UserStatePointsGame';
-import { collections } from '../../services/Database';
+import { orm } from '../../services/Database';
 import { BoardStatus } from '../Board';
 import { Words } from '../../util/Words';
+import { PrimaryKey, Property, SerializedPrimaryKey } from '@mikro-orm/core';
+import { ObjectId } from 'mongodb';
 
 export class PointsGame extends Game {
+  @PrimaryKey()
+  _id: ObjectId;
+
+  @SerializedPrimaryKey()
+  id!: string; // won't be saved in the database
+  
+  @Property()
   gamesAmount: number = 3;
+
+  @Property()
   joinedUsers: string[] = [];
 
+  @Property()
   userStates: UserStatePointsGame[] = [];
+
+  @Property()
   winner: User;
   
   constructor() {
@@ -37,7 +51,7 @@ export class PointsGame extends Game {
     }
     //Grab users
     const users = await Promise.all(this.playerIdentifiers.map(id => {
-      return collections.users.findOne({identifier: id});
+      return orm.em.findOne(User, {identifier: id});
     }));
 
     this.userStates = users.map(user => {

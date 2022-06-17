@@ -3,7 +3,7 @@ import { Game } from "../classes/Game";
 import { CustomGameCreate } from "../events/client/CustomGameCreate";
 import { GameIdentifier } from "../events/client/GameIdentifier";
 import { CustomGameResponse } from "../events/server/CustomGameResponse";
-import { collections } from "../services/Database";
+import { orm } from "../services/Database";
 import { ObjectId } from "mongodb";
 
 export abstract class GameHandler {
@@ -16,7 +16,8 @@ export abstract class GameHandler {
         const game = new Game();
         game.initializeGame(customGameCreate.type, [socket.data.user.identifier]);
         
-        const result = await collections.games.insertOne(game);
+        await orm.em.persistAndFlush(game);
+
         const response: CustomGameResponse = {
             id: result.insertedId.toHexString(),
             type: game.type,

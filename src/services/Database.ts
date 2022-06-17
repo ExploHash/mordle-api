@@ -1,40 +1,17 @@
-import * as mongoDB from "mongodb";
-
-import { Game } from "../classes/Game";
 import { PointsGame } from "../classes/gamemodes/PointsGame";
 import { User } from "../classes/User";
+import { MikroORM } from "@mikro-orm/core";
+import type { MongoDriver } from '@mikro-orm/mongodb'; // or any other SQL driver package
 
-export const collections: {
-  games?: mongoDB.Collection<Game>,
-  pointsGames?: mongoDB.Collection<PointsGame>,
-  users?: mongoDB.Collection<User>,
-} = {};
+const clientUrl = process.env.DB_CONNECTION_STRING;
+
+export var orm: MikroORM<MongoDriver>;
 
 export async function connectToDatabase() {
-    // Create a new MongoDB client with the connection string from .env
-    const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
-
-    // Connect to the cluster
-    await client.connect();
-
-    // Connect to the database with the name specified in .env
-    const db = client.db(process.env.DB_NAME);
-
-    const collectionMapping = {
-      games: "games",
-      pointsGames: "games",
-      users: "users"
-    }
-
-    for(const [propertyName, collectionName] of Object.entries(collectionMapping)) {
-      await db.listCollections({name: collectionName}).next(async (err, collinfo) => {
-        if (!collinfo) {
-          await db.createCollection(collectionName);
-        }
-      });
-
-      collections[propertyName] = db.collection(collectionName);
-    }
-
-    console.log("Connected");
+    orm = await MikroORM.init<MongoDriver>({
+      entities: [PointsGame, User],
+      dbName: 'test',
+      clientUrl,
+      type: 'mongo',
+    });
 }
